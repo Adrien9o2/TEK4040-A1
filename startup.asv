@@ -1,0 +1,55 @@
+a = 0.05;
+b = 0.1;
+c = 0.2;
+mu = 0.002;
+V = a*b*c;
+m = mu*V;
+
+Jb11 = m*(b^2+c^2)/12;
+Jb22 = m*(a^2+c^2)/12;
+Jb33 = m*(a^2+b^2)/12;
+
+J = [Jb11,   0,     0;
+     0,   Jb22,     0;
+     0,      0,  Jb33];
+Wztilde = 2*pi;
+K = 0.5*Jb33*Wztilde^2;
+h0perfect = Jb33*Wztilde;
+Wxtilde = 2*K/Jb11;
+Wytilde = 2*K/Jb22;
+Wz = Wztilde*sqrt(0.99);
+Wx = Wxtilde*sqrt(0.99);
+Wy = Wytilde*sqrt(0.99);
+
+hNearX = sqrt((Jb11*Wx)^2+(Jb33*Wztilde/10)^2);
+hNearY = sqrt((Jb22*Wy)^2+(Jb33*Wztilde/10)^2);
+hNearZ = sqrt((Jb33*Wz)^2+(Jb11*Wxtilde/10)^2);
+
+halfAxisCinetic  = [sqrt(2*K/Jb11),sqrt(2*K/Jb22),sqrt(2*K/Jb33)]; 
+halfAxisMomentumPerfect = [h0/Jb11,h0/Jb22,h0/Jb33];
+halfAxisMomentumNearX = [hNearX/Jb11,hNearX/Jb22,hNearX/Jb33];
+halfAxisMomentumNearY = [hNearY/Jb11,hNearY/Jb22,hNearY/Jb33];
+halfAxisMomentumNearZ = [hNearZ/Jb11,hNearZ/Jb22,hNearZ/Jb33];
+
+hold on
+[X1,Y1,Z1] = ellipsoid(0,0,0,halfAxisCinetic(1),halfAxisCinetic(2),halfAxisCinetic(3),50);
+[X2,Y2,Z2] = ellipsoid(0,0,0,halfAxisMomentumNearX(1),halfAxisMomentumNearX(2),halfAxisMomentumNearX(3),50);
+e1 = surf(X1,Y1,Z1,FaceColor='blue',EdgeColor='none');
+e2 = surf(X2,Y2,Z2,FaceColor='red',EdgeColor='none');
+axis equal
+hold off
+hold on
+[X1,Y1,Z1] = ellipsoid(0,0,0,halfAxisCinetic(1),halfAxisCinetic(2),halfAxisCinetic(3),50);
+[X2,Y2,Z2] = ellipsoid(0,0,0,halfAxisMomentumNearY(1),halfAxisMomentumNearY(2),halfAxisMomentumNearY(3),50);
+surf(X1,Y1,Z1,FaceColor='blue',EdgeColor='none');
+surf(X2,Y2,Z2,FaceColor='red',EdgeColor='none');
+axis equal
+hold off
+hold on
+[X1,Y1,Z1] = ellipsoid(0,0,0,halfAxisCinetic(1),halfAxisCinetic(2),halfAxisCinetic(3),50);
+[X2,Y2,Z2] = ellipsoid(0,0,0,halfAxisMomentumNearZ(1),halfAxisMomentumNearZ(2),halfAxisMomentumNearZ(3),50);
+surf(X1,Y1,Z1,FaceColor='blue',EdgeColor='none');
+surf(X2,Y2,Z2,FaceColor='red',EdgeColor='none');
+axis equal
+hold off
+
